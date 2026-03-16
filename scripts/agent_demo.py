@@ -3,6 +3,7 @@ import warnings
 import structlog
 import logging
 from src.agent.main import root_agent
+from src.agent.retry import agent_retry
 from dotenv import load_dotenv
 from google.adk.runners import InMemoryRunner
 from google.genai import types as genai_types
@@ -26,6 +27,7 @@ structlog.configure(
 logger = structlog.get_logger(__name__)
 
 
+@agent_retry
 async def run_agent(agent, query):
     """Helper to run an agent and return the final text response."""
     runner = InMemoryRunner(agent=agent)
