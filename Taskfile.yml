@@ -1,0 +1,102 @@
+version: '3'
+
+vars:
+  PYTHON: uv run
+  AGENT_PORT: 10000
+  ADK_PORT: 8000
+
+tasks:
+  init:
+    desc: Initialize the project (install deps, pre-commit hooks)
+    cmds:
+      - uv sync
+      - uv run pre-commit install
+    status:
+      - test -d .venv
+
+  deps:
+    desc: Check for required dependencies
+    cmds:
+      - uv --version
+      - python --version
+
+  up:
+    desc: Start all servers
+    deps:
+      - task: up:agent
+      - task: up:adk
+
+  up:agent:
+    desc: Start the A2A Agent Server
+    cmds:
+      - "{{.PYTHON}} python src/agent/main.py"
+    env:
+      AGENT_PORT: "{{.AGENT_PORT}}"
+      PYTHONWARNINGS: "ignore::UserWarning:google.adk"
+
+  agent:card:
+    desc: Fetch and pretty-print the A2A Agent Card
+    cmds:
+      - curl -s http://localhost:{{.AGENT_PORT}}/.well-known/agent-card.json | python -m json.tool
+
+  up:adk:
+    aliases: [adk]
+    desc: Start the ADK Workbench (web UI)
+    dir: src/
+    cmds:
+      - adk web
+    env:
+      PORT: "{{.ADK_PORT}}"
+      PYTHONWARNINGS: "ignore::UserWarning"
+
+  down:
+    desc: Stop all servers
+    cmds:
+      - lsof -i :{{.AGENT_PORT}} -t | xargs kill -9 || true
+      - lsof -i :{{.ADK_PORT}} -t | xargs kill -9 || true
+
+  demo:
+    desc: Run all demos
+    cmds:
+      - task: demo:agent
+      - task: demo:a2a
+
+  demo:agent:
+    desc: Run the single-agent demo (4 scenarios)
+    cmds:
+      - "{{.PYTHON}} python scripts/agent_demo.py"
+    env:
+      PYTHONPATH: "."
+      PYTHONWARNINGS: "ignore::UserWarning:google.adk"
+
+  demo:a2a:
+    desc: Run the A2A multi-agent demo
+    cmds:
+      - "{{.PYTHON}} python scripts/a2a_demo.py"
+    env:
+      PYTHONPATH: "."
+      PYTHONWARNINGS: "ignore::UserWarning:google.adk"
+
+  test:
+    desc: Run all tests
+    cmds:
+      - "{{.PYTHON}} pytest tests/"
+
+  test:cov:
+    desc: Run tests with coverage report
+    cmds:
+      - "{{.PYTHON}} pytest --cov=src --cov-report=term-missing tests/"
+
+  test:a2a:
+    desc: Run A2A integration tests (requires agent server to be running)
+    cmds:
+      - "{{.PYTHON}} python tests/test_client.py"
+    env:
+      AGENT_PORT: "{{.AGENT_PORT}}"
+      PYTHONPATH: "."
+
+  lint:
+    desc: Run linting and formatting
+    cmds:
+      - "{{.PYTHON}} ruff check ."
+      - "{{.PYTHON}} ruff format ."
