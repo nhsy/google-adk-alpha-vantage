@@ -1,8 +1,10 @@
 import os
 import pytest
 from unittest.mock import patch, MagicMock
-from src.agent.main import root_agent
+from src.agent.main import root_agent, ticker_resolver_tool
 from src.agent.tools import get_current_datetime
+from src.agent.ticker_resolver import ticker_resolver_agent
+from google.adk.tools import AgentTool
 from google.adk.tools.mcp_tool import McpToolset
 
 
@@ -10,9 +12,11 @@ def test_agent_properties():
     """Verify core properties of the Alpha Vantage agent."""
     assert root_agent.name == "alpha_vantage_agent"
     assert "Alpha Vantage Financial Analysis Assistant" in root_agent.instruction
-    assert len(root_agent.tools) == 2
+    assert len(root_agent.tools) == 3
     assert isinstance(root_agent.tools[0], McpToolset)
     assert root_agent.tools[1] is get_current_datetime
+    assert isinstance(root_agent.tools[2], AgentTool)
+    assert root_agent.tools[2] is ticker_resolver_tool
 
 
 def test_mcp_toolset_config():
@@ -68,6 +72,17 @@ def test_system_instruction_content():
     assert "COMPANY_OVERVIEW" in instruction
     assert "NEWS_SENTIMENT" in instruction
     assert "3 seconds" in instruction
+    assert "TICKER RESOLUTION" in instruction
+    assert "ticker_resolver" in instruction
+
+
+def test_ticker_resolver_agent_properties():
+    """Verify core properties of the ticker resolver sub-agent."""
+    from google.adk.tools import google_search
+
+    assert ticker_resolver_agent.name == "ticker_resolver"
+    assert ticker_resolver_agent.tools == [google_search]
+    assert "ticker" in ticker_resolver_agent.instruction.lower()
 
 
 def test_missing_api_key_raises(monkeypatch):

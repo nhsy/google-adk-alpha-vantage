@@ -4,7 +4,9 @@ import structlog
 import logging
 
 from google.adk.agents import LlmAgent
+from google.adk.tools import AgentTool
 from google.adk.tools.mcp_tool import McpToolset, StreamableHTTPConnectionParams
+from .ticker_resolver import ticker_resolver_agent
 from .tools import get_current_datetime
 
 # Suppress warnings about experimental features (module filter + message filter
@@ -52,7 +54,8 @@ SYSTEM_INSTRUCTION = (
     "- CORE QUOTES: For simple price checks, always use 'GLOBAL_QUOTE'.\n"
     "- FUNDAMENTAL ANALYSIS: When asked about a company's health or financial status, use 'COMPANY_OVERVIEW' and 'EARNINGS'.\n"
     "- SENTIMENT: Use 'NEWS_SENTIMENT' to gauge the current market mood for a specific ticker.\n"
-    "- CLARITY: Map informal company names to stock symbols (e.g., 'Apple' to 'AAPL') using 'SYMBOL_SEARCH' if the symbol is not provided.\n"
+    "- TICKER RESOLUTION: When a company name is given instead of a ticker symbol, call the 'ticker_resolver' agent tool "
+    "to resolve it (e.g. 'Intel' → 'INTC'), then use the returned ticker with Alpha Vantage tools.\n"
     "- RATE LIMIT: The Alpha Vantage API enforces a rate limit of 1 request per 3 seconds on free-tier keys. "
     "Wait at least 3 seconds between consecutive tool calls to avoid errors.\n"
     "- SCOPE: Only assist with financial and stock-market related queries. Politely decline all other topics."
@@ -63,11 +66,12 @@ logger.info("--- 🤖 Creating ADK Alpha Vantage Agent... ---")
 
 # Initialize the toolset pointing to the Alpha Vantage MCP server
 toolset = McpToolset(connection_params=StreamableHTTPConnectionParams(url=MCP_URL))
+ticker_resolver_tool = AgentTool(agent=ticker_resolver_agent)
 
 root_agent = LlmAgent(
     model=os.getenv("AGENT_GEMINI_MODEL", "gemini-2.5-flash"),
     name="alpha_vantage_agent",
     description="An agent that provides financial data and stock analysis using Alpha Vantage.",
     instruction=SYSTEM_INSTRUCTION,
-    tools=[toolset, get_current_datetime],
+    tools=[toolset, get_current_datetime, ticker_resolver_tool],
 )
