@@ -4,14 +4,11 @@ import structlog
 import logging
 from src.agent.main import root_agent
 from src.agent.retry import agent_retry
-from dotenv import load_dotenv
 from google.adk.runners import InMemoryRunner
 from google.genai import types as genai_types
 
 warnings.filterwarnings("ignore", message=r".*\[EXPERIMENTAL\].*")
 warnings.filterwarnings("ignore", message=r".*non-text parts.*")
-
-load_dotenv()
 
 # Configure logging
 structlog.configure(

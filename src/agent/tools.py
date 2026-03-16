@@ -1,7 +1,20 @@
 from datetime import datetime, timezone
+from pydantic import BaseModel
 
 
-def get_current_datetime() -> dict:
+class DateTimeResult(BaseModel):
+    iso: str
+    date: str
+    year: int
+    month: int
+    month_name: str
+    day: int
+    weekday: str
+    time: str
+    timezone: str
+
+
+def get_current_datetime() -> DateTimeResult:
     """Returns the current UTC date and time broken into useful components.
 
     Returns:
@@ -17,14 +30,14 @@ def get_current_datetime() -> dict:
             - timezone: Always "UTC"
     """
     now = datetime.now(tz=timezone.utc)
-    return {
-        "iso": now.isoformat(),
-        "date": now.strftime("%Y-%m-%d"),
-        "year": now.year,
-        "month": now.month,
-        "month_name": now.strftime("%B"),
-        "day": now.day,
-        "weekday": now.strftime("%A"),
-        "time": now.strftime("%H:%M:%S"),
-        "timezone": "UTC",
-    }
+    return DateTimeResult(
+        iso=now.isoformat(),
+        date=now.strftime("%Y-%m-%d"),
+        year=now.year,
+        month=now.month,
+        month_name=now.strftime("%B"),
+        day=now.day,
+        weekday=now.strftime("%A"),
+        time=now.strftime("%H:%M:%S"),
+        timezone="UTC",
+    )

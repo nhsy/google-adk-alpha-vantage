@@ -3,7 +3,6 @@ import warnings
 import structlog
 import logging
 
-from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.tools.mcp_tool import McpToolset, StreamableHTTPConnectionParams
 from .tools import get_current_datetime
@@ -33,9 +32,9 @@ structlog.configure(
 
 logger = structlog.get_logger(__name__)
 
-load_dotenv()
-
 _api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
+if not _api_key:
+    raise ValueError("ALPHA_VANTAGE_API_KEY environment variable is not set")
 MCP_URL = f"https://mcp.alphavantage.co/mcp?apikey={_api_key}"
 
 SYSTEM_INSTRUCTION = (

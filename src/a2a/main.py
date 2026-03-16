@@ -1,9 +1,6 @@
 import os
-from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.tools.mcp_tool import McpToolset, StreamableHTTPConnectionParams
-
-load_dotenv()
 
 _api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
 MCP_URL = f"https://mcp.alphavantage.co/mcp?apikey={_api_key}"

@@ -8,7 +8,7 @@ A sample agent demonstrating ADK + A2A + MCP working together for financial data
 
 ## Overview
 
-This project builds a production-ready reference for integrating [Alpha Vantage's](https://www.alphavantage.co/) financial data into agentic workflows. It showcases how MCP, ADK, and A2A can be composed to create a capable financial data agent that can query stock prices, forex rates, cryptocurrency data, technical indicators, and macroeconomic data.
+This project builds a demo for integrating [Alpha Vantage's](https://www.alphavantage.co/) financial data into agentic workflows. It showcases how MCP, ADK, and A2A can be composed to create a capable financial data agent that can query stock prices, forex rates, cryptocurrency data, technical indicators, and macroeconomic data.
 
 ### Model Context Protocol (MCP)
 
@@ -20,7 +20,7 @@ The agents connect directly to the [Alpha Vantage MCP server](https://mcp.alphav
 
 > ADK is a flexible and modular framework for developing and deploying AI agents. While optimized for Gemini and the Google ecosystem, ADK is model-agnostic, deployment-agnostic, and is built for compatibility with other frameworks. - [ADK](https://github.com/google/adk-python)
 
-ADK (v1.0.0+) serves as the orchestration framework for the agents in this project. It manages conversation state, invokes MCP tools when needed, and supports multi-agent workflows via the A2A protocol.
+ADK serves as the orchestration framework for the agents in this project. It manages conversation state, invokes MCP tools when needed, and supports multi-agent workflows via the A2A protocol.
 
 ### Agent2Agent (A2A)
 
@@ -41,7 +41,7 @@ The [A2A Python SDK](https://github.com/google-a2a/a2a-python) is used to expose
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com:nhsy/google-adk-alpha-vantage.git
 cd google-adk-alpha-vantage
 ```
 

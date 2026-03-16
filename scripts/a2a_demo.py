@@ -2,14 +2,11 @@ import asyncio
 import warnings
 import structlog
 import logging
-from dotenv import load_dotenv
 from src.a2a.main import research_agent, analyst_agent
 from google.adk.runners import InMemoryRunner
 from google.genai import types as genai_types
 
 warnings.filterwarnings("ignore", message=r".*non-text parts.*")
-
-load_dotenv()
 
 # Configure logging
 structlog.configure(

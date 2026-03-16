@@ -1,5 +1,7 @@
 version: '3'
 
+dotenv: ['.env']
+
 vars:
   PYTHON: uv run
   AGENT_PORT: 10000
@@ -34,6 +36,12 @@ tasks:
       AGENT_PORT: "{{.AGENT_PORT}}"
       PYTHONPATH: "."
       PYTHONWARNINGS: "ignore::UserWarning:google.adk"
+      ALPHA_VANTAGE_API_KEY: "{{.ALPHA_VANTAGE_API_KEY}}"
+      AGENT_GEMINI_MODEL: "{{.AGENT_GEMINI_MODEL}}"
+      GOOGLE_API_KEY: "{{.GOOGLE_API_KEY}}"
+      GOOGLE_GENAI_USE_VERTEXAI: "{{.GOOGLE_GENAI_USE_VERTEXAI}}"
+      GOOGLE_CLOUD_PROJECT: "{{.GOOGLE_CLOUD_PROJECT}}"
+      GOOGLE_CLOUD_LOCATION: "{{.GOOGLE_CLOUD_LOCATION}}"
 
   agent:card:
     desc: Fetch and pretty-print the A2A Agent Card
@@ -49,6 +57,12 @@ tasks:
     env:
       PORT: "{{.ADK_PORT}}"
       PYTHONWARNINGS: "ignore::UserWarning"
+      ALPHA_VANTAGE_API_KEY: "{{.ALPHA_VANTAGE_API_KEY}}"
+      AGENT_GEMINI_MODEL: "{{.AGENT_GEMINI_MODEL}}"
+      GOOGLE_API_KEY: "{{.GOOGLE_API_KEY}}"
+      GOOGLE_GENAI_USE_VERTEXAI: "{{.GOOGLE_GENAI_USE_VERTEXAI}}"
+      GOOGLE_CLOUD_PROJECT: "{{.GOOGLE_CLOUD_PROJECT}}"
+      GOOGLE_CLOUD_LOCATION: "{{.GOOGLE_CLOUD_LOCATION}}"
 
   down:
     desc: Stop all servers
@@ -69,6 +83,12 @@ tasks:
     env:
       PYTHONPATH: "."
       PYTHONWARNINGS: "ignore::UserWarning:google.adk"
+      ALPHA_VANTAGE_API_KEY: "{{.ALPHA_VANTAGE_API_KEY}}"
+      AGENT_GEMINI_MODEL: "{{.AGENT_GEMINI_MODEL}}"
+      GOOGLE_API_KEY: "{{.GOOGLE_API_KEY}}"
+      GOOGLE_GENAI_USE_VERTEXAI: "{{.GOOGLE_GENAI_USE_VERTEXAI}}"
+      GOOGLE_CLOUD_PROJECT: "{{.GOOGLE_CLOUD_PROJECT}}"
+      GOOGLE_CLOUD_LOCATION: "{{.GOOGLE_CLOUD_LOCATION}}"
 
   demo:a2a:
     desc: Run the A2A multi-agent demo
@@ -77,16 +97,38 @@ tasks:
     env:
       PYTHONPATH: "."
       PYTHONWARNINGS: "ignore::UserWarning:google.adk"
+      ALPHA_VANTAGE_API_KEY: "{{.ALPHA_VANTAGE_API_KEY}}"
+      AGENT_GEMINI_MODEL: "{{.AGENT_GEMINI_MODEL}}"
+      GOOGLE_API_KEY: "{{.GOOGLE_API_KEY}}"
+      GOOGLE_GENAI_USE_VERTEXAI: "{{.GOOGLE_GENAI_USE_VERTEXAI}}"
+      GOOGLE_CLOUD_PROJECT: "{{.GOOGLE_CLOUD_PROJECT}}"
+      GOOGLE_CLOUD_LOCATION: "{{.GOOGLE_CLOUD_LOCATION}}"
 
   test:
     desc: Run all tests
     cmds:
       - "{{.PYTHON}} pytest tests/"
+    env:
+      PYTHONPATH: "."
+      ALPHA_VANTAGE_API_KEY: "{{.ALPHA_VANTAGE_API_KEY}}"
+      AGENT_GEMINI_MODEL: "{{.AGENT_GEMINI_MODEL}}"
+      GOOGLE_API_KEY: "{{.GOOGLE_API_KEY}}"
+      GOOGLE_GENAI_USE_VERTEXAI: "{{.GOOGLE_GENAI_USE_VERTEXAI}}"
+      GOOGLE_CLOUD_PROJECT: "{{.GOOGLE_CLOUD_PROJECT}}"
+      GOOGLE_CLOUD_LOCATION: "{{.GOOGLE_CLOUD_LOCATION}}"
 
   test:cov:
     desc: Run tests with coverage report
     cmds:
       - "{{.PYTHON}} pytest --cov=src --cov-report=term-missing tests/"
+    env:
+      PYTHONPATH: "."
+      ALPHA_VANTAGE_API_KEY: "{{.ALPHA_VANTAGE_API_KEY}}"
+      AGENT_GEMINI_MODEL: "{{.AGENT_GEMINI_MODEL}}"
+      GOOGLE_API_KEY: "{{.GOOGLE_API_KEY}}"
+      GOOGLE_GENAI_USE_VERTEXAI: "{{.GOOGLE_GENAI_USE_VERTEXAI}}"
+      GOOGLE_CLOUD_PROJECT: "{{.GOOGLE_CLOUD_PROJECT}}"
+      GOOGLE_CLOUD_LOCATION: "{{.GOOGLE_CLOUD_LOCATION}}"
 
   test:a2a:
     desc: Run A2A integration tests (requires agent server to be running)
@@ -95,6 +137,12 @@ tasks:
     env:
       AGENT_PORT: "{{.AGENT_PORT}}"
       PYTHONPATH: "."
+      ALPHA_VANTAGE_API_KEY: "{{.ALPHA_VANTAGE_API_KEY}}"
+      AGENT_GEMINI_MODEL: "{{.AGENT_GEMINI_MODEL}}"
+      GOOGLE_API_KEY: "{{.GOOGLE_API_KEY}}"
+      GOOGLE_GENAI_USE_VERTEXAI: "{{.GOOGLE_GENAI_USE_VERTEXAI}}"
+      GOOGLE_CLOUD_PROJECT: "{{.GOOGLE_CLOUD_PROJECT}}"
+      GOOGLE_CLOUD_LOCATION: "{{.GOOGLE_CLOUD_LOCATION}}"
 
   lint:
     desc: Run linting and formatting

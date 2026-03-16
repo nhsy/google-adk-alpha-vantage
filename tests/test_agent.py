@@ -68,3 +68,12 @@ def test_system_instruction_content():
     assert "COMPANY_OVERVIEW" in instruction
     assert "NEWS_SENTIMENT" in instruction
     assert "3 seconds" in instruction
+
+
+def test_missing_api_key_raises(monkeypatch):
+    import importlib
+    import src.agent.main as agent_main
+
+    monkeypatch.setenv("ALPHA_VANTAGE_API_KEY", "")
+    with pytest.raises(ValueError, match="ALPHA_VANTAGE_API_KEY"):
+        importlib.reload(agent_main)
