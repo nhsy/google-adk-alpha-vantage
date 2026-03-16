@@ -33,7 +33,10 @@ The [A2A Python SDK](https://github.com/google-a2a/a2a-python) is used to expose
 ### Prerequisites
 
 - Python 3.13+
-- An [Alpha Vantage API key](https://www.alphavantage.co/support/#api-key) (free tier available)
+- [uv](https://docs.astral.sh/uv/getting-started/installation) for dependency management
+- [Task](https://taskfile.dev/) for automation
+- An [Alpha Vantage API key](https://www.alphavantage.co/support/#api-key)
+- A [Google AI Studio API key](https://aistudio.google.com/apikey) **or** a Google Cloud project with [Vertex AI](https://cloud.google.com/vertex-ai) enabled
 - Git, for cloning the repository.
 
 ### Installation
@@ -41,21 +44,11 @@ The [A2A Python SDK](https://github.com/google-a2a/a2a-python) is used to expose
 1. Clone the repository:
 
 ```bash
-git clone https://github.com:nhsy/google-adk-alpha-vantage.git
+git clone https://github.com/nhsy/google-adk-alpha-vantage.git
 cd google-adk-alpha-vantage
 ```
 
-2. Install [uv](https://docs.astral.sh/uv/getting-started/installation) and [Task](https://taskfile.dev/):
-
-```bash
-# Install uv (macOS/Linux)
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Install Task (macOS/Linux)
-sh -c "$(curl --location https://task.get.taskfile.dev/install.sh)" -- -d
-```
-
-3. Initialize the project:
+2. Initialize the project:
 
 ```bash
 task init
@@ -63,7 +56,7 @@ task init
 
 This installs all Python dependencies and sets up pre-commit hooks.
 
-4. Configure environment variables (via `.env` file):
+3. Configure environment variables (via `.env` file):
 
 Copy `.env.example` to `.env` and fill in the required values:
 
@@ -199,6 +192,10 @@ To enable JSON structured logging (useful for production environments or log agg
 export LOG_JSON=TRUE
 task up
 ```
+
+## Disclaimer
+
+This project is intended solely as a demonstration of how Google ADK, the A2A protocol, and the Alpha Vantage MCP server can be composed into an agentic workflow. The financial data and analysis produced by this agent should not be relied upon for investment decisions or any other financial purpose. Use at your own risk.
 
 ## Contributing
 
