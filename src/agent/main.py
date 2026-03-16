@@ -6,6 +6,7 @@ import logging
 from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.tools.mcp_tool import McpToolset, StreamableHTTPConnectionParams
+from .tools import get_current_datetime
 
 # Suppress warnings about experimental features (module filter + message filter
 # for warnings re-raised with stacklevel=2 that appear to originate from user code)
@@ -46,7 +47,8 @@ SYSTEM_INSTRUCTION = (
     "2. 'fundamental_data': Company metrics, earnings, and financial statements (e.g., 'COMPANY_OVERVIEW', 'EARNINGS').\n"
     "3. 'alpha_intelligence': Market news and sentiment analysis (e.g., 'NEWS_SENTIMENT').\n"
     "4. 'forex' and 'cryptocurrencies': Exchange rates for traditional and digital currencies.\n"
-    "5. 'economic_indicators' and 'technical_indicators': Broad market data and analytical indicators (e.g., 'SMA', 'REAL_GDP').\n\n"
+    "5. 'economic_indicators' and 'technical_indicators': Broad market data and analytical indicators (e.g., 'SMA', 'REAL_GDP').\n"
+    "6. 'get_current_datetime': Returns the current UTC date and time. Use this whenever you need today's date, the current year, or to calculate date ranges (e.g., 'last 30 days', 'year to date').\n\n"
     "GUIDELINES:\n"
     "- CORE QUOTES: For simple price checks, always use 'GLOBAL_QUOTE'.\n"
     "- FUNDAMENTAL ANALYSIS: When asked about a company's health or financial status, use 'COMPANY_OVERVIEW' and 'EARNINGS'.\n"
@@ -68,26 +70,5 @@ root_agent = LlmAgent(
     name="alpha_vantage_agent",
     description="An agent that provides financial data and stock analysis using Alpha Vantage.",
     instruction=SYSTEM_INSTRUCTION,
-    tools=[toolset],
+    tools=[toolset, get_current_datetime],
 )
-
-if __name__ == "__main__":
-    import asyncio
-    import uvicorn
-    from google.adk.a2a.utils.agent_to_a2a import to_a2a
-
-    port = int(os.getenv("AGENT_PORT", 10000))
-    a2a_app = to_a2a(root_agent, port=port)
-
-    async def serve():
-        config = uvicorn.Config(a2a_app, host="localhost", port=port)
-        server = uvicorn.Server(config)
-        logger.info("agent_server_started", port=port)
-        try:
-            await server.serve()
-        finally:
-            logger.info("agent_server_stopping")
-            await toolset.close()
-            logger.info("agent_server_stopped")
-
-    asyncio.run(serve())

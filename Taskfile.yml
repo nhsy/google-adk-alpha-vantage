@@ -29,9 +29,10 @@ tasks:
   up:agent:
     desc: Start the A2A Agent Server
     cmds:
-      - "{{.PYTHON}} python src/agent/main.py"
+      - "{{.PYTHON}} python -m src.agent"
     env:
       AGENT_PORT: "{{.AGENT_PORT}}"
+      PYTHONPATH: "."
       PYTHONWARNINGS: "ignore::UserWarning:google.adk"
 
   agent:card:

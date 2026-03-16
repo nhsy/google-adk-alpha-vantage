@@ -2,6 +2,7 @@ import os
 import pytest
 from unittest.mock import patch, MagicMock
 from src.agent.main import root_agent
+from src.agent.tools import get_current_datetime
 from google.adk.tools.mcp_tool import McpToolset
 
 
@@ -9,8 +10,9 @@ def test_agent_properties():
     """Verify core properties of the Alpha Vantage agent."""
     assert root_agent.name == "alpha_vantage_agent"
     assert "Alpha Vantage Financial Analysis Assistant" in root_agent.instruction
-    assert len(root_agent.tools) == 1
+    assert len(root_agent.tools) == 2
     assert isinstance(root_agent.tools[0], McpToolset)
+    assert root_agent.tools[1] is get_current_datetime
 
 
 def test_mcp_toolset_config():

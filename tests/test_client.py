@@ -83,7 +83,7 @@ async def main() -> int:
 
     async with httpx.AsyncClient(timeout=120.0) as http_client:
         try:
-            card = await fetch_agent_card(http_client)
+            await fetch_agent_card(http_client)
         except httpx.ConnectError:
             print(
                 f"ERROR: Could not connect to agent at {AGENT_BASE_URL}. "
