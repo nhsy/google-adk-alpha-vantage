@@ -193,6 +193,10 @@ export LOG_JSON=TRUE
 task up
 ```
 
+## Architecture
+
+For a detailed overview of the agent hierarchy, protocol integrations, data flow, and project structure, see [docs/architecture.md](docs/architecture.md).
+
 ## Disclaimer
 
 This project is intended solely as a demonstration of how Google ADK, the A2A protocol, and the Alpha Vantage MCP server can be composed into an agentic workflow. The financial data and analysis produced by this agent should not be relied upon for investment decisions or any other financial purpose. Use at your own risk.
